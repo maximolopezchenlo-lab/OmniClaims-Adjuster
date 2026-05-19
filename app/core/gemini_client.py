@@ -47,8 +47,15 @@ def get_gemini_client() -> genai.Client:
     return client
 
 
-# Singleton client instance
-client = get_gemini_client()
+# Lazy-loaded singleton client instance
+_client_instance = None
+
+def get_client_instance() -> genai.Client:
+    """Lazy initialize the client to prevent blocking app startup."""
+    global _client_instance
+    if _client_instance is None:
+        _client_instance = get_gemini_client()
+    return _client_instance
 
 
 @retry(
@@ -67,7 +74,7 @@ def generate_with_retry(
     """
     generation_config = config or {}
 
-    response = client.models.generate_content(
+    response = get_client_instance().models.generate_content(
         model=model,
         contents=contents,
         config=generation_config,
@@ -95,7 +102,7 @@ def generate_json_with_retry(
     if response_schema:
         config["response_schema"] = response_schema
 
-    response = client.models.generate_content(
+    response = get_client_instance().models.generate_content(
         model=model,
         contents=contents,
         config=config,
@@ -106,7 +113,7 @@ def generate_json_with_retry(
 def list_available_models() -> list[str]:
     """List all available Gemini models for verification."""
     models = []
-    for model in client.models.list():
+    for model in get_client_instance().models.list():
         models.append(model.name)
     return models
 
@@ -122,6 +129,6 @@ def upload_file(file_path: str, display_name: str | None = None) -> object:
     if display_name:
         upload_kwargs["config"] = {"display_name": display_name}
 
-    uploaded = client.files.upload(**upload_kwargs)
+    uploaded = get_client_instance().files.upload(**upload_kwargs)
     logger.info(f"File uploaded: {uploaded.name} ({uploaded.mime_type})")
     return uploaded
