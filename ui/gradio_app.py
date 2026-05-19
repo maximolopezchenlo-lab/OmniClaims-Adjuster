@@ -146,6 +146,23 @@ CUSTOM_CSS = """
 }
 """
 
+# JavaScript to prevent Chrome auto-translate
+NO_TRANSLATE_JS = """
+() => {
+    document.documentElement.setAttribute('lang', 'en');
+    document.documentElement.setAttribute('translate', 'no');
+    document.documentElement.classList.add('notranslate');
+    const meta1 = document.createElement('meta');
+    meta1.setAttribute('name', 'google');
+    meta1.setAttribute('content', 'notranslate');
+    document.head.appendChild(meta1);
+    const meta2 = document.createElement('meta');
+    meta2.setAttribute('http-equiv', 'Content-Language');
+    meta2.setAttribute('content', 'en');
+    document.head.appendChild(meta2);
+}
+"""
+
 
 # =========================================================================
 # CORE PROCESSING FUNCTION
@@ -367,6 +384,24 @@ def load_demo_scenario(scenario_name: str) -> str:
 
 
 # =========================================================================
+# ENGLISH LOCALE — Force Gradio to English for international judges
+# =========================================================================
+ENGLISH_I18N = gr.I18n(
+    en={
+        "submit": "Submit",
+        "clear": "Clear",
+        "upload_file": "Drop File Here",
+        "or": "- or -",
+        "click_to_upload": "Click to Upload",
+        "processing": "Processing...",
+        "cancel": "Cancel",
+        "error": "Error",
+        "flag": "Flag",
+    },
+)
+
+
+# =========================================================================
 # BUILD THE GRADIO APP
 # =========================================================================
 def create_gradio_app() -> gr.Blocks:
@@ -505,6 +540,9 @@ def create_gradio_app() -> gr.Blocks:
             ],
         )
 
+        # Inject anti-translate JS on page load
+        app.load(fn=None, js=NO_TRANSLATE_JS)
+
     return app
 
 
@@ -519,4 +557,5 @@ if __name__ == "__main__":
         server_port=7860,
         share=False,
         show_error=True,
+        i18n=ENGLISH_I18N,
     )
