@@ -404,27 +404,29 @@ ENGLISH_I18N = gr.I18n(
 # =========================================================================
 # BUILD THE GRADIO APP
 # =========================================================================
+# Gradio 6.0: theme and css must be passed to launch(), not Blocks()
+OMNI_THEME = gr.themes.Base(
+    primary_hue="violet",
+    secondary_hue="blue",
+    neutral_hue="slate",
+    font=gr.themes.GoogleFont("Inter"),
+).set(
+    body_background_fill="linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d1b2a 100%)",
+    body_text_color="#e2e8f0",
+    block_background_fill="rgba(255, 255, 255, 0.04)",
+    block_border_color="rgba(255, 255, 255, 0.08)",
+    block_label_text_color="#94a3b8",
+    input_background_fill="rgba(255, 255, 255, 0.06)",
+    button_primary_background_fill="linear-gradient(135deg, #7c3aed, #2563eb)",
+    button_primary_text_color="white",
+)
+
+
 def create_gradio_app() -> gr.Blocks:
     """Create the premium Gradio interface."""
 
     with gr.Blocks(
-        css=CUSTOM_CSS,
         title="OmniClaims Adjuster — AI Agent Olympics",
-        theme=gr.themes.Base(
-            primary_hue="violet",
-            secondary_hue="blue",
-            neutral_hue="slate",
-            font=gr.themes.GoogleFont("Inter"),
-        ).set(
-            body_background_fill="linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #0d1b2a 100%)",
-            body_text_color="#e2e8f0",
-            block_background_fill="rgba(255, 255, 255, 0.04)",
-            block_border_color="rgba(255, 255, 255, 0.08)",
-            block_label_text_color="#94a3b8",
-            input_background_fill="rgba(255, 255, 255, 0.06)",
-            button_primary_background_fill="linear-gradient(135deg, #7c3aed, #2563eb)",
-            button_primary_text_color="white",
-        ),
     ) as app:
         # Header
         gr.Markdown(
@@ -558,4 +560,6 @@ if __name__ == "__main__":
         share=False,
         show_error=True,
         i18n=ENGLISH_I18N,
+        theme=OMNI_THEME,
+        css=CUSTOM_CSS,
     )

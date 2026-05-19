@@ -58,6 +58,16 @@ def get_client_instance() -> genai.Client:
     return _client_instance
 
 
+class _LazyClient:
+    """Proxy that defers Vertex AI init until first attribute access."""
+    def __getattr__(self, name):
+        return getattr(get_client_instance(), name)
+
+
+# Backward-compatible module-level name (lazy)
+client = _LazyClient()
+
+
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
