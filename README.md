@@ -1,3 +1,15 @@
+---
+title: OmniClaims Adjuster
+emoji: ⚡
+colorFrom: purple
+colorTo: blue
+sdk: docker
+app_port: 7860
+pinned: true
+license: mit
+short_description: Autonomous AI Claims Adjudication — Gemini 3.1 Pro Multi-Agent
+---
+
 # ⚡ OmniClaims Adjuster
 
 > **Autonomous AI-powered insurance claims adjudication agent.**  
