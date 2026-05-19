@@ -1,0 +1,29 @@
+# === Google AI / Gemini Core ===
+google-genai>=1.14.0
+google-adk>=1.2.0
+
+# === Web Framework ===
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+python-multipart>=0.0.18
+
+# === Data Validation ===
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+
+# === UI ===
+gradio>=5.12.0
+
+# === File Processing ===
+PyPDF2>=3.0.0
+Pillow>=11.0.0
+
+# === Utilities ===
+python-dotenv>=1.0.0
+httpx>=0.28.0
+loguru>=0.7.0
+tenacity>=9.0.0
+
+# === Development ===
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
