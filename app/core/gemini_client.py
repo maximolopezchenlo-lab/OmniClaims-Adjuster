@@ -1,8 +1,12 @@
 """
 Shared Gemini client initialization.
 
-Provides a singleton client for the google-genai SDK with
-retry logic (Rule 29) and model validation.
+Supports TWO authentication modes:
+1. API Key mode (Google AI Studio) — simpler, but requires paid credits on AI Studio
+2. Vertex AI mode (Google Cloud) — uses $300 free trial credits via Vertex AI
+
+Rule 15: API keys injected via environment, never hardcoded.
+Rule 29: Exponential backoff retry for production stability.
 """
 
 from google import genai
@@ -16,10 +20,30 @@ def get_gemini_client() -> genai.Client:
     """
     Initialize and return a Gemini API client.
 
-    Uses the API key from environment settings (Rule 15).
+    Automatically selects authentication mode based on config:
+    - If USE_VERTEX_AI=true: Uses Google Cloud credentials (ADC) + project ID
+    - Otherwise: Uses GEMINI_API_KEY from AI Studio
     """
-    client = genai.Client(api_key=settings.gemini_api_key)
-    logger.info("Gemini client initialized successfully")
+    if settings.use_vertex_ai:
+        client = genai.Client(
+            vertexai=True,
+            project=settings.google_cloud_project,
+            location=settings.google_cloud_location,
+        )
+        logger.info(
+            f"Gemini client initialized via Vertex AI "
+            f"(project={settings.google_cloud_project}, "
+            f"location={settings.google_cloud_location})"
+        )
+    else:
+        if not settings.gemini_api_key:
+            raise ValueError(
+                "GEMINI_API_KEY is required when USE_VERTEX_AI is false. "
+                "Set it in your .env file or switch to Vertex AI mode."
+            )
+        client = genai.Client(api_key=settings.gemini_api_key)
+        logger.info("Gemini client initialized via API Key (Google AI Studio)")
+
     return client
 
 
