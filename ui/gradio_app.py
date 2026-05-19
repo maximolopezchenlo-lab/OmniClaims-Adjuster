@@ -182,7 +182,7 @@ def process_claim_ui(
     if not claim_text or not claim_text.strip():
         return (
             "❌ Please enter a claim description.",
-            "", "", "", "", ""
+            "", "", "", "", "", ""
         )
 
     # Progress tracking
@@ -213,7 +213,7 @@ def process_claim_ui(
         logger.error(f"Pipeline error: {e}")
         return (
             f"❌ Error processing claim: {str(e)}",
-            "", "", "", "", ""
+            "", "", "", "", "", ""
         )
 
     progress(1.0, desc="✅ Complete!")
