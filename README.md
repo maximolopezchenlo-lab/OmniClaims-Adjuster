@@ -7,7 +7,7 @@ sdk: docker
 app_port: 7860
 pinned: true
 license: mit
-short_description: Autonomous AI Claims Adjudication — Gemini 3.1 Pro Multi-Agent
+short_description: AI Claims Adjudication — Gemini 3.1 Pro
 ---
 
 # ⚡ OmniClaims Adjuster
