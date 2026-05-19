@@ -117,7 +117,28 @@ def generate_json_with_retry(
         contents=contents,
         config=config,
     )
-    return response.text
+    
+    # Rule 29: Robust JSON parsing inside the retry loop
+    text = response.text.strip()
+    if text.startswith("```json"):
+        text = text[7:]
+    elif text.startswith("```"):
+        text = text[3:]
+        
+    if text.endswith("```"):
+        text = text[:-3]
+        
+    text = text.strip()
+    
+    # Validate it parses correctly, otherwise raise exception to trigger retry
+    import json
+    try:
+        json.loads(text)
+    except json.JSONDecodeError as e:
+        logger.error(f"Failed to parse JSON from model, retrying... Error: {e}")
+        raise ValueError(f"Invalid JSON from model: {e}")
+        
+    return text
 
 
 def list_available_models() -> list[str]:

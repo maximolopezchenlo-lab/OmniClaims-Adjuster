@@ -427,6 +427,8 @@ def create_gradio_app() -> gr.Blocks:
 
     with gr.Blocks(
         title="OmniClaims Adjuster — AI Agent Olympics",
+        theme=OMNI_THEME,
+        css=CUSTOM_CSS,
     ) as app:
         # Header
         gr.Markdown(
@@ -560,6 +562,4 @@ if __name__ == "__main__":
         share=False,
         show_error=True,
         i18n=ENGLISH_I18N,
-        theme=OMNI_THEME,
-        css=CUSTOM_CSS,
     )
